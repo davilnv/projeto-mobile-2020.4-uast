@@ -3,6 +3,10 @@
 
 * Desenvolvimento de uma aplicação para android, onde tem como o foco uma comunicação entre amigos sobre Séries de TV e Filmes, o usuário pode interagir através das avaliações feitas por outros usuários(uma espécie de publicação), indicando se gostou ou não daquele entretenimento e se vale a pena a outra pessoa assistir.
 
+#### Imagem Prótotipo do Aplicativo
+
+![](/readme-img/prototipo.png)
+
 #### Tecnologias
 Esse projeto foi desenvolvido com as seguinte tecnologias:
 
