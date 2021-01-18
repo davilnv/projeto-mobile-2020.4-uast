@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:mobile/app/repository/repository_shared.dart';
 import 'package:mobile/shared/cores.dart';
 
 class Splash extends StatefulWidget {
@@ -7,6 +10,30 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  RepositoryShared repositoryShared;
+
+  void startTime() {
+    new Timer(Duration(seconds: 3), navigate);
+  }
+
+  void navigate() async {
+    print('navigate');
+
+    bool flag = await this.repositoryShared.verificar_login();
+    if (flag) {
+      print('TELA HOME');
+      return;
+    }
+    print('TELA DE LOGIN');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.repositoryShared = RepositoryShared();
+    this.startTime();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
