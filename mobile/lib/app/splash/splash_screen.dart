@@ -13,18 +13,18 @@ class _SplashState extends State<Splash> {
   RepositoryShared repositoryShared;
 
   void startTime() {
-    new Timer(Duration(seconds: 3), navigate);
+    new Timer(Duration(seconds: 1), navigate); // Alterar tempo de carregamento
   }
 
   void navigate() async {
     print('navigate');
 
-    bool flag = await this.repositoryShared.verificar_login();
+    bool flag = await this.repositoryShared.verificarLogin();
     if (flag) {
-      print('TELA HOME');
+      Navigator.pushReplacementNamed(context, 'home');
       return;
     }
-    print('TELA DE LOGIN');
+    Navigator.pushReplacementNamed(context, 'login');
   }
 
   @override

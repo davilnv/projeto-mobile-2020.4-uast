@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/app/cadastrar/cadastrar.dart';
+import 'package:mobile/app/home/home.dart';
+import 'package:mobile/app/login/login.dart';
 import 'package:mobile/app/splash/splash_screen.dart';
 
 void main() {
@@ -10,11 +13,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, WidgetBuilder> rotas = {
-      // 'home': (_)=>Home(),
-      // 'login': (_)=>Login(),
+      'splash': (_) => Splash(),
+      'home': (_) => Home(),
+      'login': (_) => Login(),
+      'cadastrar': (_) => Cadastrar()
     };
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: rotas,
       home: Splash(),
     );
