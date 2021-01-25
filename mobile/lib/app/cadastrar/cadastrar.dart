@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/app/repository/repository_shared.dart';
 import 'package:mobile/shared/cores.dart';
 
 class Cadastrar extends StatefulWidget {
@@ -11,8 +12,9 @@ class Cadastrar extends StatefulWidget {
 
 class _CadastrarState extends State<Cadastrar> {
   GlobalKey<FormState> _key = GlobalKey();
-
+  RepositoryShared repositoryShared;
   List<TextEditingController> textControllers = List();
+  bool _textoEscondido = true;
 
   File _image;
 
@@ -23,8 +25,7 @@ class _CadastrarState extends State<Cadastrar> {
   }
 
   _imgDaCamera() async {
-    PickedFile image = await ImagePicker()
-        .getImage(source: ImageSource.camera, imageQuality: 50);
+    PickedFile image = await ImagePicker().getImage(source: ImageSource.camera);
 
     setState(() {
       _image = File(image.path);
@@ -32,12 +33,79 @@ class _CadastrarState extends State<Cadastrar> {
   }
 
   _imgDaGaleria() async {
-    PickedFile image = await ImagePicker()
-        .getImage(source: ImageSource.gallery, imageQuality: 50);
+    PickedFile image =
+        await ImagePicker().getImage(source: ImageSource.gallery);
 
     setState(() {
       _image = File(image.path);
     });
+  }
+
+  _enviarParaServer() async {
+    String nome = textControllers[0].text;
+    String login = textControllers[1].text;
+    String senha = textControllers[2].text;
+    String confirmacaoSenha = textControllers[3].text;
+
+    bool cadastrado;
+    if (senha == confirmacaoSenha) {
+      cadastrado =
+          await repositoryShared.cadastrarUsuario(nome, login, senha, _image);
+    }
+
+    if (cadastrado) {
+      Navigator.pushReplacementNamed(context, 'splash');
+    }
+  }
+
+  _voltarParaLogin() {
+    Navigator.pushReplacementNamed(context, 'login');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loopCriarControllers();
+    repositoryShared = RepositoryShared();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Cadastrar",
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'Press Start 2P',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Cores.primaria,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: _voltarParaLogin,
+        ),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.all(20),
+            child: Center(
+              child: Form(
+                key: _key,
+                child: _getFormulario(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _mostrarOpcoes(context) {
@@ -68,44 +136,6 @@ class _CadastrarState extends State<Cadastrar> {
           ),
         );
       },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loopCriarControllers();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "Cadastrar",
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Press Start 2P',
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Cores.primaria,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(20),
-            child: Center(
-              child: Form(
-                key: _key,
-                child: _getFormulario(),
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -192,13 +222,26 @@ class _CadastrarState extends State<Cadastrar> {
         ),
         TextFormField(
           autofocus: false,
+          obscureText: _textoEscondido,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            hintText: 'Senha',
-            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "Senha",
+            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(
                 32,
+              ),
+            ),
+            suffixIcon: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _textoEscondido = !_textoEscondido;
+                });
+              },
+              child: Icon(
+                _textoEscondido ? Icons.visibility : Icons.visibility_off,
+                semanticLabel:
+                    _textoEscondido ? 'Mostrar senha' : 'Esconder Senha',
               ),
             ),
           ),
@@ -209,10 +252,11 @@ class _CadastrarState extends State<Cadastrar> {
         ),
         TextFormField(
           autofocus: false,
+          obscureText: _textoEscondido,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            hintText: 'Confirmação de Senha',
-            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "Confirmação de senha",
+            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(
                 32,
@@ -230,7 +274,7 @@ class _CadastrarState extends State<Cadastrar> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
             ),
-            onPressed: null, //_enviarParaServer,
+            onPressed: _enviarParaServer,
             padding: EdgeInsets.all(12),
             color: Cores.primaria,
             child: Text(

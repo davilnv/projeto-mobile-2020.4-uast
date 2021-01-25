@@ -9,7 +9,8 @@ class Usuario(models.Model):
     login = models.CharField(max_length=200)
     senha = models.CharField(max_length=200)
     pontuacao = models.IntegerField()
-    link_imagem_perfil = models.CharField(max_length=200)
+    imagem = models.TextField()
+    nome_imagem = models.CharField(max_length=200)
     logado = models.BooleanField(default=False)
 
     def __str__(self):

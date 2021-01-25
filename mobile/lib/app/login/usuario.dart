@@ -1,10 +1,13 @@
+import 'dart:io';
+
 class Usuario {
   int id;
   String nome;
   String login;
   String senha;
   int pontuacao;
-  String link_imagem_perfil;
+  String imagem;
+  String nome_imagem;
   bool logado;
 
   Usuario({
@@ -13,7 +16,8 @@ class Usuario {
     this.login,
     this.senha,
     this.pontuacao,
-    this.link_imagem_perfil,
+    this.imagem,
+    this.nome_imagem,
     this.logado,
   });
 
@@ -23,12 +27,13 @@ class Usuario {
         "login": login,
         "senha": senha,
         "pontuacao": pontuacao,
-        "link_imagem_perfil": link_imagem_perfil,
+        "imagem": imagem,
+        "nome_imagem": nome_imagem,
         "logado": logado
       };
 
   @override
   String toString() {
-    return this.nome;
+    return this.id.toString() + "/" + this.login + " / " + this.senha;
   }
 }

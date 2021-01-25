@@ -10,7 +10,8 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'login',
             'senha',
             'pontuacao',
-            'link_imagem_perfil',
+            'imagem',
+            'nome_imagem',
             'logado'
         )
         model = models.Usuario

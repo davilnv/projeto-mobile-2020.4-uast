@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
   image_picker: ^0.6.7+21
+  bubble_bottom_bar: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,8 @@ flutter:
 
   assets:
     - assets/fonts/
+    - assets/images/twd-capa.jpeg
+    - assets/images/perfil-image.png
 
   fonts:
     - family: Press Start 2P

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       'splash': (_) => Splash(),
       'home': (_) => Home(),
       'login': (_) => Login(),
-      'cadastrar': (_) => Cadastrar()
+      'cadastrar': (_) => Cadastrar(),
     };
 
     return MaterialApp(

@@ -16,8 +16,16 @@ class RepositoryShared {
   Future<bool> verificarLogin() async {
     print('logar');
 
+    bool confirmar = false;
+
     _response = await this._dio.get(url_usuario);
-    return this._response.data[0]['logado'];
+    List listaUsuarios = this._response.data;
+    for (var user in listaUsuarios) {
+      if (user['logado']) {
+        confirmar = true;
+      }
+    }
+    return confirmar;
   }
 
   Future<bool> verificarUsuario(String login, String senha) async {
@@ -34,7 +42,8 @@ class RepositoryShared {
             login: usuario['login'],
             senha: usuario['senha'],
             pontuacao: usuario['pontuacao'],
-            link_imagem_perfil: usuario['link_imagem_perfil'],
+            imagem: usuario['imagem'],
+            nome_imagem: usuario['nome_imagem'],
             logado: true);
         _response =
             await this._dio.put(alterarUsuario(user.id), data: user.toJson());
@@ -56,11 +65,25 @@ class RepositoryShared {
         return false;
       }
     }
-    if (imagem == null) return false;
+    if (imagem == null) {
+      return false;
+    }
 
     String base64imagem = base64Encode(imagem.readAsBytesSync());
     String filename = imagem.path.split('/').last;
 
-    return this._response.data[0]['logado'];
+    user = Usuario(
+      nome: nome,
+      login: login,
+      senha: senha,
+      pontuacao: 0,
+      imagem: base64imagem,
+      nome_imagem: filename,
+      logado: false,
+    );
+
+    _response = await this._dio.post(url_usuario, data: user.toJson());
+
+    return true;
   }
 }
