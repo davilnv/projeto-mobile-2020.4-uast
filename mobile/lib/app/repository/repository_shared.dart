@@ -86,4 +86,71 @@ class RepositoryShared {
 
     return true;
   }
+
+  Future<bool> cadastrarEntretenimento(
+      String titulo,
+      String descricao,
+      int tempo,
+      int avaliacao,
+      int temporada,
+      int episodios,
+      DateTime dataLancamento,
+      File imagem) async {
+    print('cadastar entretenimento');
+
+    String fileName = imagem.path.split('/').last;
+
+    FormData formData = FormData.fromMap({
+      'titulo': titulo,
+      'descricao': descricao,
+      'tempo': tempo,
+      'avaliacao': avaliacao,
+      'temporada': temporada,
+      'episodios': episodios,
+      'data_lancamento': dataLancamento,
+      'imagem': await MultipartFile.fromFile(imagem.path, filename: fileName),
+    });
+
+    _response = await this._dio.post(url_entretenimento, data: formData);
+
+    return true;
+  }
+
+  Future<List> listarEntretenimentos() async {
+    print('listar entretenimento');
+
+    _response = await this._dio.get(url_entretenimento);
+
+    List entretenimentos = _response.data;
+
+    return entretenimentos;
+  }
+
+  // Future<String> retornarLinkImagemEntretenimento(int id) async {
+  //   _response = await this._dio.get(getByIdEntretenimento(id));
+
+  //   return _response.data
+  // }
+
+  Future<List> listarPublicacoes() async {
+    print('listar publicações');
+
+    _response = await this._dio.get(url_publicacao);
+
+    List publicacoes = _response.data;
+
+    return publicacoes;
+  }
+
+  Future<List> listarUsuarios() async {
+    print('listar usuarios');
+
+    // String fileName = imagem.path.split('/').last;
+
+    _response = await this._dio.get(url_usuario);
+
+    List usuarios = _response.data;
+
+    return usuarios;
+  }
 }

@@ -8,3 +8,7 @@ const String url_publicacao = '${api}publicacao';
 String alterarUsuario(int id) {
   return '${api}usuario/${id}/';
 }
+
+String getByIdEntretenimento(int id) {
+  return '${api}publicacao/${id}/';
+}

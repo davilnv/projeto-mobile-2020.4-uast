@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:mobile/app/amigos/amigos.dart';
 import 'package:mobile/app/avaliacao/avaliacao.dart';
 import 'package:mobile/app/catalogo/catalogo.dart';
+import 'package:mobile/app/catalogo/entretenimento.dart';
+import 'package:mobile/app/home/publicacao.dart';
 import 'package:mobile/app/perfil/perfil.dart';
+import 'package:mobile/app/repository/repository_shared.dart';
 import 'package:mobile/shared/cores.dart';
+import 'package:mobile/shared/exibir_avaliacao.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,6 +19,40 @@ class _HomeState extends State<Home> {
   int _index;
   Widget _tela;
 
+  var publicacoes = List<Publicacao>();
+  var entretenimentos = List<Entretenimento>();
+
+  getEntretenimentos() async {
+    RepositoryShared repositoryShared = RepositoryShared();
+    List lista = await repositoryShared.listarEntretenimentos();
+    for (var entretenimento in lista) {
+      Entretenimento e = Entretenimento.fromJson(entretenimento);
+      setState(() {
+        entretenimentos.add(e);
+      });
+    }
+  }
+
+  getPublicacoes() async {
+    RepositoryShared repositoryShared = RepositoryShared();
+    List lista = await repositoryShared.listarPublicacoes();
+    for (var publicacao in lista) {
+      Publicacao e = Publicacao.fromJson(publicacao);
+      setState(() {
+        publicacoes.add(e);
+      });
+    }
+  }
+
+  String linkImagem(int id) {
+    for (var entretenimento in entretenimentos) {
+      if (entretenimento.id == id) {
+        return entretenimento.imagem;
+      }
+    }
+    return 'https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg';
+  }
+
   _verificarTela() {
     switch (_index) {
       case 0:
@@ -23,7 +61,7 @@ class _HomeState extends State<Home> {
         break;
       case 1:
         print("catalogo");
-        _tela = getCatalogo();
+        _tela = Catalogo();
         break;
       case 2:
         print("amigos");
@@ -48,6 +86,8 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _index = 0;
+    getPublicacoes();
+    getEntretenimentos();
     _verificarTela();
   }
 
@@ -88,7 +128,16 @@ class _HomeState extends State<Home> {
         child: _tela,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          switch (_index) {
+            case 1:
+              Navigator.pushReplacementNamed(
+                  context, 'cadastrar_entretenimento');
+              break;
+            default:
+              break;
+          }
+        },
         child: Icon(Icons.add),
         backgroundColor: Cores.primaria,
       ),
@@ -98,24 +147,35 @@ class _HomeState extends State<Home> {
   }
 
   Widget _getHome() {
-    return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            _getCardPublicacao(),
-            SizedBox(
-              height: 20,
-            ),
-            _getCardPublicacao(),
-          ],
-        ),
-      ),
+    return ListView.builder(
+      // padding: EdgeInsets.all(20),
+      itemCount: publicacoes.length,
+      itemBuilder: (context, index) {
+        return _getCardPublicacao(publicacoes[index]);
+      },
     );
   }
 
-  Widget _getCardPublicacao() {
+  // Widget _getHome() {
+  //   return SingleChildScrollView(
+  //     child: Container(
+  //       margin: EdgeInsets.all(20),
+  //       child: Column(
+  //         children: <Widget>[
+  //           _getCardPublicacao(),
+  //           SizedBox(
+  //             height: 20,
+  //           ),
+  //           _getCardPublicacao(),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _getCardPublicacao(Publicacao publicacao) {
     return Container(
+      padding: EdgeInsets.all(5),
       height: 389,
       width: 325,
       child: Card(
@@ -125,13 +185,8 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.all(22),
-              // child: Image.network(
-              //   "https://upload.wikimedia.org/wikipedia/pt/5/59/The_walking_dead_season_10_poster.jpg",
-              //   height: 290,
-              //   width: 250,
-              // ),
-              child: Image.asset(
-                'assets/images/twd-capa.jpeg',
+              child: Image.network(
+                linkImagem(publicacao.entretenimento),
                 height: 290,
                 width: 250,
               ),
@@ -139,33 +194,21 @@ class _HomeState extends State<Home> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Text("${publicacao.likes}"),
                 Icon(
                   Icons.thumb_up_alt,
                 ),
                 SizedBox(
                   width: 20,
                 ),
-                Icon(
-                  Icons.star,
-                ),
-                Icon(
-                  Icons.star,
-                ),
-                Icon(
-                  Icons.star,
-                ),
-                Icon(
-                  Icons.star_border,
-                ),
-                Icon(
-                  Icons.star_border,
-                ),
+                exibirAvaliacao(publicacao.avaliacaoEntretenimento),
                 SizedBox(
                   width: 20,
                 ),
                 Icon(
                   Icons.thumb_down_alt,
-                )
+                ),
+                Text("${publicacao.deslikes}"),
               ],
             ),
           ],

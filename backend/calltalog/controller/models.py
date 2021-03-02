@@ -24,8 +24,8 @@ class Entretenimento(models.Model):
     data_lancamento = models.DateTimeField(default=timezone.now)
     avaliacao = models.IntegerField()
     temporada = models.IntegerField()
-    episoios = models.IntegerField()
-    link_imagem_capa = models.CharField(max_length=200)
+    episodios = models.IntegerField()
+    imagem = models.ImageField(upload_to='media')
 
     def __str__(self):
         return self.titulo

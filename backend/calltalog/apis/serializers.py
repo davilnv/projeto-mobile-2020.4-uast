@@ -27,8 +27,8 @@ class EntretenimentoSerializer(serializers.ModelSerializer):
             'data_lancamento',
             'avaliacao',
             'temporada',
-            'episoios',
-            'link_imagem_capa'
+            'episodios',
+            'imagem'
         )
         model = models.Entretenimento
 

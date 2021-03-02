@@ -278,7 +278,7 @@ class _CadastrarState extends State<Cadastrar> {
             padding: EdgeInsets.all(12),
             color: Cores.primaria,
             child: Text(
-              "Entrar",
+              "Cadastrar",
               style: TextStyle(
                 fontFamily: 'Press Start 2P',
                 color: Colors.black,

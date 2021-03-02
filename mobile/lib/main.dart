@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/app/cadastrar/cadastrar.dart';
+import 'package:mobile/app/cadastrar/cadastrar_entretenimento.dart';
 import 'package:mobile/app/home/home.dart';
 import 'package:mobile/app/login/login.dart';
 import 'package:mobile/app/splash/splash_screen.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       'home': (_) => Home(),
       'login': (_) => Login(),
       'cadastrar': (_) => Cadastrar(),
+      'cadastrar_entretenimento': (_) => CadastrarEntretenimento(),
     };
 
     return MaterialApp(
