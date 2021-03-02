@@ -7,6 +7,18 @@
 
 ![](/readme-img/prototipo.png)
 
+#### Funcionamento do Aplicativo V1.0
+
+##### Tela de Splash e Tela de Login
+![](/readme-img/funcionamento-1.gif)
+
+##### Tela de Login - Logando no aplicativo
+![](/readme-img/funcionamento-2.gif)
+
+##### Tela de Home e Catalogo - Exibindo publicações e entretenimentos cadastrados
+![](/readme-img/funcionamento-3.gif)
+
+
 #### Tecnologias
 Esse projeto foi desenvolvido com as seguinte tecnologias:
 
